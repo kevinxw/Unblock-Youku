@@ -29,9 +29,16 @@ function new_random_ip() {
 function urls2pac(url_whitelist, url_list, proxy_server) {
     "use strict";
     var s = 'function FindProxyForURL(url, host) {\n' +
+        ' var regexStr = /.*?:\\/\\/.*?(youku|qiyi|iqiyi|letv|sohu|ku6|ku6cdn)\\.com\\/crossdomain\\.xml/;\n' +
             '    if (';
-
+ 
     var i;
+    s += 'regexStr.test(url)){\n' +
+         ' return "PROXY api.youku.com:80";\n' +
+         ' }\n';
+ 
+    s += 'else if (';
+
 
     if (url_whitelist.length > 0) {
 	for (i = 0; i < url_whitelist.length; i++) {
@@ -60,6 +67,8 @@ function urls2pac(url_whitelist, url_list, proxy_server) {
 
     s += '        return "PROXY ' + proxy_server + '";\n' +
          '    }\n';
+
+
 
     s += '    return "DIRECT";\n' +
          '}';
